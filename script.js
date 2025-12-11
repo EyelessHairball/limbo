@@ -243,6 +243,7 @@ async function transitionToRotary() {
   });
   
   await Promise.all(spinPromises);
+  await sleep(200);
   
   const startPositions = Array.from(keys).map(key => {
     const rect = key.getBoundingClientRect();
