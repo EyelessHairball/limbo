@@ -110,33 +110,49 @@ async function shuffleKeys() {
 
 async function transitionToRotary() {
   document.title = "Limbo"; 
-
-  keys.forEach((key, i) => {
-    const hue = (i * 45) % 360;
-    key.style.filter = `hue-rotate(${hue}deg) brightness(2)`;
+  
+  const spinPromises = keys.map((key, i) => {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const hue = (i * 45) % 360;
+        key.style.filter = `hue-rotate(${hue}deg) brightness(2)`;
+        
+        key.animate([
+          { transform: "rotate(0deg) scale(1)" },
+          { transform: "rotate(180deg) scale(1.1)" },
+          { transform: "rotate(360deg) scale(1)" }
+        ], {
+          duration: 600,
+          easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+          fill: "forwards"
+        });
+        
+        setTimeout(resolve, 600);
+      }, i * 80); 
+    });
   });
-
+  
+  await Promise.all(spinPromises);
+  await sleep(200);
+  
   const startPositions = Array.from(keys).map(key => {
     const rect = key.getBoundingClientRect();
     return { left: rect.left, top: rect.top };
   });
-
+  
   container.className = "rotary-container";
   container.offsetHeight; 
-
+  
   const endPositions = Array.from(keys).map(key => {
     const rect = key.getBoundingClientRect();
     return { left: rect.left, top: rect.top };
   });
-
-  const duration = 1700; 
-
+  
+  const duration = 2000; 
   keys.forEach((key, i) => {
     const deltaX = startPositions[i].left - endPositions[i].left;
     const deltaY = startPositions[i].top - endPositions[i].top;
-
     key.style.opacity = "1";
-
     key.animate([
       { transform: `translate(${deltaX}px, ${deltaY}px) rotate(0deg)`, opacity: 1 },
       { transform: `translate(0, 0) rotate(-90deg)`, opacity: 1 }
@@ -146,7 +162,7 @@ async function transitionToRotary() {
       fill: "forwards"
     });
   });
-
+  
   container.animate([
     { transform: "rotate(0deg)" },
     { transform: "rotate(90deg)" }
@@ -155,9 +171,9 @@ async function transitionToRotary() {
     easing: "cubic-bezier(.17,.67,.7,.76)",
     fill: "forwards"
   });
-
+  
   await sleep(duration);
-
+  
   container.animate([
     { transform: "rotate(90deg)" },
     { transform: "rotate(450deg)" }
@@ -166,7 +182,7 @@ async function transitionToRotary() {
     iterations: Infinity,
     easing: "linear"
   });
-
+  
   keys.forEach(key => {
     key.animate([
       { transform: "rotate(-90deg)" },
