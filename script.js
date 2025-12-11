@@ -99,7 +99,7 @@ async function shuffleKeys() {
   document.body.animate(
   [
     { backgroundColor: "rgba(255, 255, 255, 1)" },
-    { backgroundColor: "rgba(0, 0, 0, 1)" } 
+    { backgroundColor: "rgba(16, 120, 206, 1)" } 
   ],
   {
     duration: 1300,
