@@ -127,13 +127,12 @@ async function transitionToRotary() {
           fill: "forwards"
         });
         
-        setTimeout(resolve, 600);
+        setTimeout(resolve, 400);
       }, i * 80); 
     });
   });
   
   await Promise.all(spinPromises);
-  await sleep(200);
   
   const startPositions = Array.from(keys).map(key => {
     const rect = key.getBoundingClientRect();
